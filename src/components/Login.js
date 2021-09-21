@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Navlink, useHistory } from "react-router-dom";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from "./Navbar";
+import Paxpage from "./Paxpage";
+
+export var paxEmailtest = "";
+
 
 const Login = () => {
   const history = useHistory();
@@ -22,7 +26,6 @@ const Login = () => {
   const Postdata = async (e) => {
     e.preventDefault();
     const { email, phone } = passenger;
-
     const res = await fetch("/paxlogin", {
       method: "POST",
       headers: {
@@ -35,56 +38,63 @@ const Login = () => {
     });
 
     const data = await res.json();
-    console.log(data);
+    console.log("This is data= " + data);
 
     if (data==="Pax not in DB" || !data) {
       window.alert("Invalid credentials");
       console.log("Login failed");
     } else {
       console.log("Login success");
-      //history.push('/Adminpage');
+      paxEmailtest=email;
+      history.push('/paxpage');
     }
   };
   return (
     <>
+    {/* if(!valid){} else{PAXpage} */}
       <form method="POST" className="loginformgroup">
-        {/* Enter Email */}
-        <div className="form-floating mb-3">
-          <input
-            type="text"
-            className="form-control"
-            id="floatingInput"
-            placeholder="name@example.com"
-            value={passenger.email}
-            onChange={handleInputs}
-            name="email"
-          />
-          <label htmlFor="floatingInput">Email</label>
-        </div>
+      {/* Enter Email */}
+      <div className="form-floating mb-3">
+        <input
+          type="text"
+          className="form-control"
+          id="floatingInput"
+          placeholder="name@example.com"
+          value={passenger.email}
+          onChange={handleInputs}
+          name="email"
+          autoComplete="off"
+        />
+        <label htmlFor="floatingInput">Email</label>
+      </div>
 
-        {/* Enter Phone No. */}
-        <div className="form-floating mb-3">
-          <input
-            type="[password]"
-            className="form-control"
-            id="floatingInput"
-            placeholder="password"
-            value={passenger.phone}
-            onChange={handleInputs}
-            name="phone"
-          />
-          <label htmlFor="floatingInput">Phone No.</label>
-        </div>
+      {/* Enter Phone No. */}
+      <div className="form-floating mb-3">
+        <input
+          type="[password]"
+          className="form-control"
+          id="floatingInput"
+          placeholder="password"
+          value={passenger.phone}
+          onChange={handleInputs}
+          name="phone"
+          autoComplete="off"
+        />
+        <label htmlFor="floatingInput">Phone No.</label>
+      </div>
 
-        <button
-          type="button"
-          name="submit"
-          onClick={Postdata}
-          className="btn btn-primary my-3"
-        >
-          Submit
-        </button>
-      </form>
+      <button
+        type="button"
+        name="submit"
+        onClick={Postdata}
+        className="btn btn-primary my-3"
+      >
+        Submit
+      </button>
+    </form>
+    
+      {/* <Paxpage paxEmail={passenger.email} /> */}
+      
     </>
   );
 };
